@@ -1,25 +1,109 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+
+### Code for reading in the dataset and/or processing the data, load libraries needed
+
+```{r load_data, echo = TRUE}
+setwd("~/Downloads")
+ activity <-read.csv(file = "activity.csv", stringsAsFactors = FALSE) 
+  library(dplyr)
+```
+### Code to sumsteps at daily level
+```{r sum_steps, echo = TRUE}
+ library(dplyr)
+ dailySteps <- activity %>%
+   select(date, steps) %>%
+   group_by(date) %>%
+   summarise(steps = sum(steps, na.rm = TRUE))
+```
+
+### plot of total daily steps
+```{r plot1, echo = TRUE}
+ plot1 <- barplot(dailySteps$steps,
+                  names.arg = dailySteps$date,
+                  xlab="Date", ylab = "Total Daily Steps",
+                  main = "Total Daily Steps Oct - Nov 2012",
+                  col = "blue")
+```
+
+### Mean and Median Steps per Day
+
+```{r avg_steps, echo = TRUE}
+ dailyAvgSteps <- activity %>%
+   select(date, steps) %>%
+   group_by(date) %>%
+   summarise(mean_steps = mean(steps, na.rm = TRUE),
+             median_steps = median(steps, na.rm = TRUE))
+```
+
+# TIME SERIES PLOT FOR AVERAGES
+```{r ts_plot, echo = TRUE}
+ plotAvg <- barplot(dailyAvgSteps$mean_steps,
+                    names.arg = dailyAvgSteps$date,
+                    xlab="Date", ylab = "Avg Daily Steps",
+                    main = "Average Daily Steps Oct - Nov 2012",
+                    col = "orange")
+```
+
+# 5-minute interval that, on average, contains the maximum number of steps
+
+```{r max_interval, echo = TRUE}
+ maxInterval <- activity[which(activity$steps == max(activity$steps, na.rm = TRUE)),]
+ print(maxInterval)
+```
+
+# Code to describe and show a strategy for imputing missing data
+```{r impute, echo = TRUE}
+activity2 <- activity
+ # create a second data set, 
+ # Data imputation - if steps is NA, make it 0
+ activity2$steps <- ifelse(is.na(activity2$steps),0,activity2$steps)
+```
+
+# Histogram of the total number of steps taken each day after missing values are imputed
+```{r plot_impute, echo = TRUE}
+ dailySteps2 <- activity2 %>%
+   select(date, steps) %>%
+   group_by(date) %>%
+   summarise(steps = sum(steps, na.rm = TRUE))
+ 
+ 
+ # Histogram/Bar Plot
+ plotImp <- barplot(dailySteps2$steps,
+                  names.arg = dailySteps2$date,
+                  xlab="Date", ylab = "Total Daily Steps (Imputed)",
+                  main = "Total Daily Steps Oct - Nov 2012 (Imputed)",
+                  col = "green")
+```
+
+# Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends 
+
+```{r  weekend_plot, echo = TRUE}
+#convert date to actual data format 
+ dailyAvgSteps2 <- activity2 %>%
+   select(date, steps) %>%
+   group_by(date) %>%
+   summarise(mean_steps = mean(steps, na.rm = TRUE),
+             median_steps = median(steps, na.rm = TRUE))
+ 
+ dailyAvgSteps2$date <-  as.Date(dailyAvgSteps2$date, '%Y-%m-%d')
+ 
+ dailyAvgSteps2$dow <- weekdays(dailyAvgSteps2$date)
+
+ #split the data set in to weekdays and weekends
+ weekdays <- dailyAvgSteps2[which(dailyAvgSteps2$dow %in% c('Monday','Tuesday','Wednesday','Thursday','Friday')),]
+ weekends <- dailyAvgSteps2[which(dailyAvgSteps2$dow %in% c('Saturday','Sunday')),]
+
+ #panel plot weekend vs. weekdays
+par(mfrow=c(1,2))
+ barplot(weekdays$mean_steps,
+         names.arg = weekdays$date,
+         xlab="Weekdays", ylab = "Total Daily Steps",
+         main = "Mean Daily Steps Weekdays",
+         col = "blue")
+ barplot(weekends$mean_steps,
+         names.arg = weekends$date,
+         xlab="Weekends", ylab = "Total Daily Steps",
+         main = "Mean Daily Steps Weekends",
+         col = "red")
 
 
-## Loading and preprocessing the data
-
-
-
-## What is mean total number of steps taken per day?
-
-
-
-## What is the average daily activity pattern?
-
-
-
-## Imputing missing values
-
-
-
-## Are there differences in activity patterns between weekdays and weekends?
+```
