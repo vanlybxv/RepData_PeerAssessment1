@@ -1,18 +1,36 @@
----
-output: 
-  html_document: 
-    keep_md: yes
----
 
 ### Code for reading in the dataset and/or processing the data, load libraries needed
 
-```{r load_data, echo = TRUE}
+
+```r
 setwd("~/Downloads")
  activity <-read.csv(file = "activity.csv", stringsAsFactors = FALSE) 
   library(dplyr)
 ```
+
+```
+## Warning: package 'dplyr' was built under R version 3.2.5
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
 ### Code to sum steps at daily level
-```{r sum_steps, echo = TRUE}
+
+```r
  library(dplyr)
  dailySteps <- activity %>%
    select(date, steps) %>%
@@ -21,16 +39,20 @@ setwd("~/Downloads")
 ```
 
 ### Histogram of total daily steps
-```{r plot1, echo = TRUE}
+
+```r
  plot1 <- hist(dailySteps$steps,
                   xlab="", ylab = "Steps",
                   main="Histogram of Activity Monitoring",
                   col = "blue")
 ```
 
+![](PA1_template_files/figure-html/plot1-1.png)<!-- -->
+
 ### Code to calcualte Mean and Median Steps per Day
 
-```{r avg_steps, echo = TRUE}
+
+```r
  dailyAvgSteps <- activity %>%
    select(date, steps) %>%
    group_by(date) %>%
@@ -39,9 +61,27 @@ setwd("~/Downloads")
 dailyAvgSteps
 ```
 
+```
+## # A tibble: 61 × 3
+##          date mean_steps median_steps
+##         <chr>      <dbl>        <dbl>
+## 1  2012-10-01        NaN           NA
+## 2  2012-10-02    0.43750            0
+## 3  2012-10-03   39.41667            0
+## 4  2012-10-04   42.06944            0
+## 5  2012-10-05   46.15972            0
+## 6  2012-10-06   53.54167            0
+## 7  2012-10-07   38.24653            0
+## 8  2012-10-08        NaN           NA
+## 9  2012-10-09   44.48264            0
+## 10 2012-10-10   34.37500            0
+## # ... with 51 more rows
+```
+
 
 # TIME SERIES PLOT FOR AVERAGES
-```{r ts_plot, echo = TRUE}
+
+```r
  plotAvg <- barplot(dailyAvgSteps$mean_steps,
                     names.arg = dailyAvgSteps$date,
                     xlab="", ylab = "Steps",
@@ -49,19 +89,24 @@ dailyAvgSteps
                     col = "orange")
 ```
 
+![](PA1_template_files/figure-html/ts_plot-1.png)<!-- -->
+
 # Code to fund max steps 5 minute interval
 
-```{r max_interval, echo = TRUE}
+
+```r
  maxInterval <- activity[which(activity$steps == max(activity$steps, na.rm = TRUE)),'interval']
  message <-paste0("Interval with most steps is interval #",maxInterval)
 ```
 
 # Interval with the most steps
-```{r max_interval_message, echo = FALSE}
- print(message)
+
+```
+## [1] "Interval with most steps is interval #615"
 ```
 # Code to describe and show a strategy for imputing missing data
-```{r impute, echo = TRUE}
+
+```r
 activity2 <- activity
  # create a second data set, 
  # Data imputation - if steps is NA, make it 0
@@ -69,7 +114,8 @@ activity2 <- activity
 ```
 
 # Histogram of the total number of steps taken each day after missing values are imputed
-```{r plot_impute, echo = TRUE}
+
+```r
  dailySteps2 <- activity2 %>%
    select(date, steps) %>%
    group_by(date) %>%
@@ -83,9 +129,12 @@ activity2 <- activity
                   col = "green")
 ```
 
+![](PA1_template_files/figure-html/plot_impute-1.png)<!-- -->
+
 # Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends 
 
-```{r  weekend_plot, echo = TRUE}
+
+```r
 #convert date to actual data format 
  dailyAvgSteps2 <- activity2 %>%
    select(date, steps) %>%
@@ -115,7 +164,8 @@ activity2 <- activity
  + theme(plot.title = element_text(hjust = 0.5)) # center the title
  + facet_grid(dayType ~ .)
  )
-
 ```
+
+![](PA1_template_files/figure-html/weekend_plot-1.png)<!-- -->
 
 
