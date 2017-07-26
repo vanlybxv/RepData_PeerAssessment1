@@ -107,8 +107,8 @@ dailyAvgSteps
 # Code to describe and show a strategy for imputing missing data
 
 ```r
+ # create a second data set,
 activity2 <- activity
- # create a second data set, 
  # Data imputation - if steps is NA, make it 0
  activity2$steps <- ifelse(is.na(activity2$steps),0,activity2$steps)
 ```

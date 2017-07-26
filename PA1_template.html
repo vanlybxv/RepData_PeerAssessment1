@@ -193,8 +193,8 @@ dailyAvgSteps</code></pre>
 </div>
 <div id="code-to-describe-and-show-a-strategy-for-imputing-missing-data" class="section level1">
 <h1>Code to describe and show a strategy for imputing missing data</h1>
-<pre class="r"><code>activity2 &lt;- activity
- # create a second data set, 
+<pre class="r"><code> # create a second data set,
+activity2 &lt;- activity
  # Data imputation - if steps is NA, make it 0
  activity2$steps &lt;- ifelse(is.na(activity2$steps),0,activity2$steps)</code></pre>
 </div>
