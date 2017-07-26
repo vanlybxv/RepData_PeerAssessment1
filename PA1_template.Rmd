@@ -22,10 +22,10 @@ setwd("~/Downloads")
 
 ### Histogram of total daily steps
 ```{r plot1, echo = TRUE}
- plot1 <- hist(dailySteps$steps,
+ plot1 <-(hist(dailySteps$steps,
                   xlab="", ylab = "Steps",
                   main="Histogram of Activity Monitoring",
-                  col = "blue")
+                  col = "blue"))
 ```
 
 ### Code to calcualte Mean and Median Steps per Day
@@ -42,11 +42,11 @@ dailyAvgSteps
 
 # TIME SERIES PLOT FOR AVERAGES
 ```{r ts_plot, echo = TRUE}
- plotAvg <- barplot(dailyAvgSteps$mean_steps,
+ plotAvg <- (barplot(dailyAvgSteps$mean_steps,
                     names.arg = dailyAvgSteps$date,
                     xlab="", ylab = "Steps",
                     main = "Average Daily Steps Oct - Nov 2012",
-                    col = "orange")
+                    col = "orange"))
 ```
 
 # Code to fund max steps 5 minute interval
@@ -62,8 +62,8 @@ dailyAvgSteps
 ```
 # Code to describe and show a strategy for imputing missing data
 ```{r impute, echo = TRUE}
+ # create a second data set,
 activity2 <- activity
- # create a second data set, 
  # Data imputation - if steps is NA, make it 0
  activity2$steps <- ifelse(is.na(activity2$steps),0,activity2$steps)
 ```
@@ -77,10 +77,10 @@ activity2 <- activity
  
  
  # Histogram/Bar Plot
- plotImp <- hist(dailySteps2$steps,
+ plotImp <- (hist(dailySteps2$steps,
                  main="Histogram of Activity Monitoring (Imputed)",
                   xlab="Date", ylab = "Frequency",
-                  col = "green")
+                  col = "green"))
 ```
 
 # Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends 
@@ -107,15 +107,14 @@ activity2 <- activity
  allDays <- rbind(weekdays, weekends)
  #panel plot weekend vs. weekdays
  library(ggplot2)
- (ggplot(allDays, aes(date, mean_steps))
+dayplot <- (ggplot(allDays, aes(date, mean_steps)) 
  + geom_line()
  + geom_point(size=0.5)
  + labs(y = 'Average number of steps')
  + labs(title = "Average number of steps taken per Day ") # add a title
  + theme(plot.title = element_text(hjust = 0.5)) # center the title
- + facet_grid(dayType ~ .)
- )
-
+ + facet_grid(dayType ~ .))
+ print(dayplot)
 ```
 
 

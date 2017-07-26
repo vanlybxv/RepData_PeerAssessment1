@@ -41,10 +41,10 @@ setwd("~/Downloads")
 ### Histogram of total daily steps
 
 ```r
- plot1 <- hist(dailySteps$steps,
+ plot1 <-(hist(dailySteps$steps,
                   xlab="", ylab = "Steps",
                   main="Histogram of Activity Monitoring",
-                  col = "blue")
+                  col = "blue"))
 ```
 
 ![](PA1_template_files/figure-html/plot1-1.png)<!-- -->
@@ -82,11 +82,11 @@ dailyAvgSteps
 # TIME SERIES PLOT FOR AVERAGES
 
 ```r
- plotAvg <- barplot(dailyAvgSteps$mean_steps,
+ plotAvg <- (barplot(dailyAvgSteps$mean_steps,
                     names.arg = dailyAvgSteps$date,
                     xlab="", ylab = "Steps",
                     main = "Average Daily Steps Oct - Nov 2012",
-                    col = "orange")
+                    col = "orange"))
 ```
 
 ![](PA1_template_files/figure-html/ts_plot-1.png)<!-- -->
@@ -123,10 +123,10 @@ activity2 <- activity
  
  
  # Histogram/Bar Plot
- plotImp <- hist(dailySteps2$steps,
+ plotImp <- (hist(dailySteps2$steps,
                  main="Histogram of Activity Monitoring (Imputed)",
                   xlab="Date", ylab = "Frequency",
-                  col = "green")
+                  col = "green"))
 ```
 
 ![](PA1_template_files/figure-html/plot_impute-1.png)<!-- -->
@@ -156,14 +156,14 @@ activity2 <- activity
  allDays <- rbind(weekdays, weekends)
  #panel plot weekend vs. weekdays
  library(ggplot2)
- (ggplot(allDays, aes(date, mean_steps))
+dayplot <- (ggplot(allDays, aes(date, mean_steps)) 
  + geom_line()
  + geom_point(size=0.5)
  + labs(y = 'Average number of steps')
  + labs(title = "Average number of steps taken per Day ") # add a title
  + theme(plot.title = element_text(hjust = 0.5)) # center the title
- + facet_grid(dayType ~ .)
- )
+ + facet_grid(dayType ~ .))
+ print(dayplot)
 ```
 
 ![](PA1_template_files/figure-html/weekend_plot-1.png)<!-- -->
